@@ -1,10 +1,12 @@
 package com.alex.login.mvc.controller;
 
 import com.alex.login.mvc.data.LoginMvcModel;
-import com.alex.login.mvc.data.UserLogged;
+import com.alex.login.mvc.data.User;
+import com.alex.login.mvc.delegate.api.UserDelegate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by alejandro on 8/21/16.
@@ -24,51 +27,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/login.htm")
 public class LoginFormController {
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    @Autowired
+    private UserDelegate userDelegate;
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView onSubmit(LoginMvcModel loginMvcModel, BindingResult result) {
 
-        String urlString = "http://localhost:8080/back/rest/login/authenticate";
+        User user = userDelegate.authenticateRest(loginMvcModel);
+        List<User> users = userDelegate.getUsersRest();
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        // create request body
-        JSONObject request = new JSONObject();
-        request.put("username", loginMvcModel.getUsername());
-        request.put("password", loginMvcModel.getPassword());
-        request.put("firstName", "");
-        request.put("lastName", "");
-        request.put("role", "");
-
-// set headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<String>(request.toString(), headers);
-
-// send request and parse result
-        ResponseEntity<String> loginResponse = restTemplate
-                .exchange(urlString, HttpMethod.POST, entity, String.class);
-
-        JSONObject userJson = new JSONObject();
-
-        if (loginResponse.getStatusCode() == HttpStatus.OK) {
-            userJson = new JSONObject(loginResponse.getBody());
-        } else if (loginResponse.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            // nono... bad credentials
-        }
-
-        UserLogged userLogged = new UserLogged();
-
-       if(userJson != null){
-            userLogged.setUsername(userJson.get("username").toString());
-            userLogged.setPassword(userJson.get("password").toString());
-            userLogged.setFirstName(userJson.get("firstName").toString());
-            userLogged.setLastName(userJson.get("lastName").toString());
-            userLogged.setRole(userJson.get("role").toString());
-        }
-
-        ModelAndView model = new ModelAndView("private/privatearea", "user", userLogged);
+        ModelAndView model = new ModelAndView("private/privatearea", "user", user);
 
         return model;
 
