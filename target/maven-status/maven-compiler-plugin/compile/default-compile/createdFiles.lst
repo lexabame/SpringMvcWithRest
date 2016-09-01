@@ -1,1 +1,6 @@
+com/alex/login/mvc/delegate/api/UserDelegate.class
+com/alex/login/mvc/controller/LoginFormController.class
 com/alex/login/mvc/controller/MainController.class
+com/alex/login/mvc/data/User.class
+com/alex/login/mvc/data/LoginMvcModel.class
+com/alex/login/mvc/delegate/impl/UserDelegateImpl.class

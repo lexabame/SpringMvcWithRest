@@ -1,1 +1,6 @@
 /Users/alejandro/Ejercicios/SpringMVC/src/main/java/com/alex/login/mvc/controller/MainController.java
+/Users/alejandro/Ejercicios/SpringMVC/src/main/java/com/alex/login/mvc/controller/LoginFormController.java
+/Users/alejandro/Ejercicios/SpringMVC/src/main/java/com/alex/login/mvc/delegate/api/UserDelegate.java
+/Users/alejandro/Ejercicios/SpringMVC/src/main/java/com/alex/login/mvc/data/LoginMvcModel.java
+/Users/alejandro/Ejercicios/SpringMVC/src/main/java/com/alex/login/mvc/delegate/impl/UserDelegateImpl.java
+/Users/alejandro/Ejercicios/SpringMVC/src/main/java/com/alex/login/mvc/data/User.java
